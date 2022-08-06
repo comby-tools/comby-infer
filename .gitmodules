@@ -1,0 +1,4 @@
+[submodule "InferRules"]
+	path = InferRules
+	url = https://github.com/ameyaketkar/inferrules
+	branch = main

@@ -1,0 +1,5 @@
+server/_build
+server/public
+client/public
+client/elm-stuff
+*.swp
