@@ -8,7 +8,7 @@ docker:
 	docker build --platform linux/amd64 --tag auto-comby-ubuntu-20.04 .
 
 run:
-	docker run --platform linux/amd64 -p 8080:8080 auto-comby-ubuntu-20.04
+	docker run --platform linux/amd64 -p 8080:8080 -e SERVER_URL='http://localhost:8080' auto-comby-ubuntu-20.04
 
 .PHONY:
 	all binary docker run
