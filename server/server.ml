@@ -1,7 +1,5 @@
-let index_route =
-  Dream.get "/"
-  @@ fun _ ->
-  Dream.html
+let index_page_template url =
+  Format.sprintf
     {|<!DOCTYPE HTML>
 <html>
 <head>
@@ -11,10 +9,23 @@ let index_route =
 </head>
 <body>
   <div id="elm"></div>
-  <script>Elm.Main.init({ node: elm, flags: { height: window.innerHeight, width: window.innerWidth } });</script>
+  <script>Elm.Main.init({ node: elm, flags: { height: window.innerHeight, width: window.innerWidth, serverUrl: "%s" } });</script>
 </body>
 </html>
-|}
+|} url
+
+let index_page : string ref = ref ""
+
+let _init_index_page =
+  match Sys.getenv "SERVER_URL" with
+  | url -> index_page := index_page_template url
+  | exception Not_found ->
+    let url = "http://localhost:8080" in
+    Format.printf "No SERVER_URL, using %s@." url;
+    index_page := index_page_template url
+
+let index_route =
+  Dream.get "/" @@ fun _ -> Dream.html !index_page
 
 let javascript_route =
   let loader _root path _request =

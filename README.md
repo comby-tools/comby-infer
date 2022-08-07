@@ -9,7 +9,7 @@ Infer comby rewrite rules from concrete examples
 **Build inference binary**
 
 ```
-cd InferRules && ./gradlew build -x test
+make binary
 ```
 
 **Build and run server**
@@ -21,6 +21,5 @@ make -C client release && make -C server run
 ## Docker source build
 
 ```
-make -C client release
 docker build --platform linux/amd64 --tag auto-comby-ubuntu-20.04 .
 ```

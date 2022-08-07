@@ -6,6 +6,7 @@ kill_timeout = 5
 processes = []
 
 [env]
+  SERVER_URL = "https://auto-comby.fly.dev"
 
 [experimental]
   allowed_public_ports = []

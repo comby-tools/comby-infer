@@ -15,40 +15,41 @@ import Url.Builder
 -- ROUTES
 
 
-deployUrl =
-    "https://auto-comby.fly.dev"
-
-
-localUrl =
-    "http://localhost:8080"
-
-
-apiUrl request =
-    Url.Builder.crossOrigin deployUrl [ "api" ] [ Url.Builder.string "q" request ]
+type alias Flags =
+    { width : Int
+    , height : Int
+    , serverUrl : String
+    }
 
 
 type alias Model =
-    { leftHandSide : String
+    { serverUrl : String
+    , leftHandSide : String
     , rightHandSide : String
     , response : Maybe Response
     , error : Maybe String
     }
 
 
-initialModel : Model
-initialModel =
-    { leftHandSide = "count = 0\nfor e in es:\n count += e\nprint(count)", rightHandSide = "count = np.sum(es)", response = Nothing, error = Nothing }
-
-
 main =
     Browser.element
-        { init =
-            \() ->
-                ( initialModel, Cmd.none )
+        { init = init
         , update = update
         , view = view
         , subscriptions = \_ -> Sub.none
         }
+
+
+init : Flags -> ( Model, Cmd Msg )
+init flags =
+    ( { serverUrl = flags.serverUrl
+      , leftHandSide = "count = 0\nfor e in es:\n count += e\nprint(count)"
+      , rightHandSide = "count = np.sum(es)"
+      , response = Nothing
+      , error = Nothing
+      }
+    , Cmd.none
+    )
 
 
 type Msg
@@ -72,7 +73,14 @@ update msg model =
             in
             ( model
             , Http.get
-                { url = apiUrl (Encode.encode 0 request)
+                { url =
+                    Url.Builder.crossOrigin
+                        model.serverUrl
+                        [ "api" ]
+                        [ Url.Builder.string
+                            "q"
+                            (Encode.encode 0 request)
+                        ]
                 , expect = Http.expectJson OnResponse responseDecoder
                 }
             )
